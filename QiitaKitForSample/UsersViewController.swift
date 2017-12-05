@@ -55,10 +55,10 @@ final class UsersViewController: UIViewController {
         let request = UserFolloweeRequest(page: page, perPage: 20, userId: userId)
         ApiSession.shared.send(request, completion: { [weak self] in
             switch $0 {
-            case .success(let value):
-                self?.totalCount = value.totalCount
-                if let me = self, isPaging || me.users.count < value.nodes.count * me.page {
-                    me.users.append(contentsOf: value.nodes)
+            case .success(let response):
+                self?.totalCount = response.totalCount
+                if let me = self, isPaging || me.users.count < response.values.count * me.page {
+                    me.users.append(contentsOf: response.values)
                 }
             case .failure(let error):
                 print("QiitaKit:[Error] -> ", error)

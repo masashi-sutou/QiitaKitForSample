@@ -54,10 +54,10 @@ final class UserItemsViewController: UIViewController {
         let request = UserItemRequest(page: page, perPage: 20, userId: user.id)
         ApiSession.shared.send(request, completion: { [weak self] in
             switch $0 {
-            case .success(let value):
-                self?.totalCount = value.totalCount
-                if let me = self, isPaging || me.items.count < value.nodes.count * me.page {
-                    me.items.append(contentsOf: value.nodes)
+            case .success(let response):
+                self?.totalCount = response.totalCount
+                if let me = self, isPaging || me.items.count < response.values.count * me.page {
+                    me.items.append(contentsOf: response.values)
                 }
             case .failure(let error):
                 print("QiitaKit:[Error] -> ", error)
