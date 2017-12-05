@@ -12,7 +12,6 @@ public struct UserItemRequest: Requestable {
 
     public typealias ResponseType = Item
     
-    public static let nodeKeys: [String] = []
     public static let notFoundText: String = "投稿がありません"
     public let endpoint: URL
     public let path: String = "users/%@/items"

@@ -12,7 +12,6 @@ public struct UserFolloweeRequest: Requestable {
     
     public typealias ResponseType = User
     
-    public static let nodeKeys: [String] = []
     public static let notFoundText: String = "フォロー中のユーザーがいません"
     public let endpoint: URL
     public let path: String = "users/%@/followees"

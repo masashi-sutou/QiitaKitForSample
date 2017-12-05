@@ -21,7 +21,6 @@ public protocol Requestable {
     associatedtype ResponseType: Codable
 
     static var baseURL: URL { get }
-    static var nodeKeys: [String] { get }
     static var notFoundText: String { get }
     
     var allHTTPHeaderFields: [String: String]? { get }
