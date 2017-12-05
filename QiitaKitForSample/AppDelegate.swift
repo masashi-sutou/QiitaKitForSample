@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         // Qiita Authorization
-        ApiSession.shared.token = "Your Qiita Personal Access Toke"
+        ApiSession.shared.token = "Your Qiita Personal Access Token"
         
         return true
     }
