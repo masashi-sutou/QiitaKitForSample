@@ -126,12 +126,7 @@ extension UserItemsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        if items.isEmpty {
-            return UITableView.notFoundTextCellHeight
-        }
-        
-        return ItemCell.calculateHeight(with: self.items[indexPath.row], and: tableView)
+        return items.isEmpty ? UITableView.notFoundTextCellHeight : UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -162,7 +162,6 @@ final class UsersViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
     }
-    
 }
 
 extension UsersViewController: UITableViewDataSource {
@@ -186,12 +185,7 @@ extension UsersViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        if users.isEmpty {
-            return UITableView.notFoundTextCellHeight
-        }
-        
-        return UserCell.calculateHeight(with: users[indexPath.row], cellStyles: cellStyles, and: tableView)
+        return users.isEmpty ? UITableView.notFoundTextCellHeight : UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
