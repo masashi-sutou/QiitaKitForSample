@@ -96,6 +96,9 @@ public final class UserCell: UITableViewCell, Nibable {
         
         rowLabel.text = String(tag)
         
+        // プロフィール画像と名前のラベルを上辺で揃えるため
+        userNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        
         if let name: String = user.name, !name.isEmpty {
             userNameLabel.text = user.id + " (" + name + ")"
         } else {
@@ -116,8 +119,6 @@ public final class UserCell: UITableViewCell, Nibable {
     
     public func setupCellStyle(_ cellStyles: Set<UserCell.Style>, isAnimate: Bool) {
         
-        // プロフィール画像と名前のラベルを上辺で揃えるため
-        userNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         thumbnailImageLeft.constant = 0
         thumbnailImageWidth.constant = 64
         thumbnailImageHeight.constant = 64
