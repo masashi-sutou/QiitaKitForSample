@@ -74,7 +74,7 @@ final class UsersViewController: UIViewController {
         super.viewDidLoad()
         
         let token = ApiSession.shared.token ?? ""
-        guard !token.isEmpty || token != "Your Qiita Personal Access Token" else {
+        guard !token.isEmpty, token != "Your Qiita Personal Access Token" else {
             let alert = UIAlertController(title: "Access Token Error", message: "\"Qiita Personal Access Token\" is Required.\n Please set it to ApiSession.shared.token in AppDelegate.", preferredStyle: .alert)
             present(alert, animated: false, completion: nil)
             return
