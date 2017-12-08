@@ -94,6 +94,12 @@ final class UserItemsViewController: UIViewController {
         fetch(isPaging: true, completion: {})
     }
     
+    // MARK: - Transition
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.cellHeightList = [:]
+    }
+    
     // MARK: - UIRefreshControl
     
     @objc private func refresh(_ sender: UIRefreshControl) {

@@ -107,10 +107,7 @@ final class UsersViewController: UIViewController {
     // MARK: - Transition
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { _ in
-            self.tableView.reloadData()
-        }, completion: { _ in
-        })
+        self.cellHeightList = [:]
     }
     
     // MARK: - UIRefreshControl
@@ -130,15 +127,19 @@ final class UsersViewController: UIViewController {
         let alert = UIAlertController(title: UserCell.Style.title(), message: UserCell.Style.message(), preferredStyle: .actionSheet)
         alert.popoverPresentationController?.barButtonItem = sender
         alert.addAction(UIAlertAction(title: UserCell.Style.default.rawValue, style: .cancel, handler: { _ in
+            self.cellHeightList = [:]
             self.cellStyles = []
         }))
         alert.addAction(UIAlertAction(title: UserCell.Style.location.rawValue, style: .default, handler: { _ in
+            self.cellHeightList = [:]
             self.cellStyles.insert(.location)
         }))
         alert.addAction(UIAlertAction(title: UserCell.Style.description.rawValue, style: .default, handler: { _ in
+            self.cellHeightList = [:]
             self.cellStyles.insert(.description)
         }))
         alert.addAction(UIAlertAction(title: UserCell.Style.rowNumber.rawValue, style: .default, handler: { _ in
+            self.cellHeightList = [:]
             self.cellStyles.insert(.rowNumber)
         }))
         present(alert, animated: true, completion: nil)
@@ -146,7 +147,7 @@ final class UsersViewController: UIViewController {
     
     @objc private func tappedChangeUserId(_ sender: UIBarButtonItem) {
         
-        let alert = UIAlertController(title: "QiitaのユーザーIDを入力", message: "\n例: masashi-sutou, gaaamii, kz_kazuki, hanahiro_aze, shibuymstudy", preferredStyle: .alert)
+        let alert = UIAlertController(title: "QiitaのユーザーIDを入力", message: "\n例: masashi-sutou", preferredStyle: .alert)
         alert.popoverPresentationController?.barButtonItem = sender
         alert.addTextField { (textField) in
             textField.placeholder = "QiitaのユーザーIDを入力してください"
