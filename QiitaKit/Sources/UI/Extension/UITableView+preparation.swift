@@ -32,18 +32,14 @@ extension UITableView {
     public func dequeueReusableHeaderFooterView<T: UITableViewHeaderFooterView>(_ type: T.Type) -> T where T: Nibable {
         return dequeueReusableHeaderFooterView(withIdentifier: T.reuseIdentifier) as! T
     }
-    
-    public static var notFoundTextCellHeight: CGFloat {
-        return 88
-    }
-    
+        
     public static func notFoundTextCell<T: Requestable>(_ request: T.Type) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "notFoundTextCell")
         cell.selectionStyle = .none
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = .darkGray
         cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.text = request.notFoundText
+        cell.textLabel?.text = "\n" + request.notFoundText
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
