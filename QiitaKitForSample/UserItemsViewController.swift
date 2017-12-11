@@ -78,6 +78,7 @@ final class UserItemsViewController: UIViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView()
         tableView.registerCell(ItemCell.self)
         tableView.registerHeaderFooterView(LoadingFooterView.self)
@@ -129,10 +130,6 @@ extension UserItemsViewController: UITableViewDataSource {
         cell.tag = indexPath.row
         cell.configure(with: self.items[indexPath.row])
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
