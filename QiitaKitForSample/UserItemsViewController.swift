@@ -123,7 +123,7 @@ extension UserItemsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if items.isEmpty {
-            return UITableView.notFoundTextCell(UserItemRequest.self)
+            return UITableView.notFoundTextCell(text: UserItemRequest.notFoundText)
         }
         
         let cell = tableView.dequeueReusableCell(ItemCell.self, for: indexPath)

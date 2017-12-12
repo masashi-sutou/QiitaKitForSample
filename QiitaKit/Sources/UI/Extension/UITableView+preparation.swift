@@ -33,13 +33,13 @@ extension UITableView {
         return dequeueReusableHeaderFooterView(withIdentifier: T.reuseIdentifier) as! T
     }
         
-    public static func notFoundTextCell<T: Requestable>(_ request: T.Type) -> UITableViewCell {
+    public static func notFoundTextCell(text: String) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "notFoundTextCell")
         cell.selectionStyle = .none
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = .darkGray
         cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.text = "\n" + request.notFoundText
+        cell.textLabel?.text = "\n" + text
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }

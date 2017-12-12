@@ -176,7 +176,7 @@ extension UsersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if users.isEmpty {
-            return UITableView.notFoundTextCell(UserFolloweeRequest.self)
+            return UITableView.notFoundTextCell(text: UserFolloweeRequest.notFoundText)
         }
         
         let cell = tableView.dequeueReusableCell(UserCell.self, for: indexPath)
