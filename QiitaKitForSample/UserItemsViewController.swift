@@ -8,7 +8,6 @@
 
 import UIKit
 import QiitaKit
-import SafariServices
 
 final class UserItemsViewController: UIViewController {
 
@@ -182,7 +181,8 @@ extension UserItemsViewController: UITableViewDelegate {
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
-        let next = SFSafariViewController(url: items[indexPath.row].url)
-        present(next, animated: true, completion: nil)
+        
+        let next = ItemViewController(item: items[indexPath.row])
+        navigationController?.pushViewController(next, animated: true)
     }
 }
