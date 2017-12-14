@@ -11,21 +11,17 @@ import QiitaKit
 
 final class FavoriteItemsViewController: UITableViewController {
 
-    private let favoriteModel: FavoriteModel = FavoriteModel.shared
+    let favoriteModel = FavoriteModel()
     
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        favoriteModel.delegate = self
         navigationItem.title = "お気に入りの投稿"
         tableView.tableFooterView = UIView()
         tableView.registerCell(ItemCell.self)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
     }
     
     // MARK: - UITableViewDataSource
@@ -49,7 +45,13 @@ final class FavoriteItemsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let next = ItemViewController(item: favoriteModel.items[indexPath.row])
+        let next = ItemViewController(item: favoriteModel.items[indexPath.row], favoriteModel: favoriteModel)
         navigationController?.pushViewController(next, animated: true)
+    }
+}
+
+extension FavoriteItemsViewController: FavoriteModelDelegate {
+    func favoriteDidChange() {
+        tableView.reloadData()
     }
 }

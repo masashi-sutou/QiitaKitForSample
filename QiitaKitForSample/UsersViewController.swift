@@ -11,6 +11,8 @@ import QiitaKit
 
 final class UsersViewController: UIViewController {
     
+    var favoriteModel: FavoriteModel?
+    
     @IBOutlet weak var tableView: UITableView!
     
     private let refreshControl = UIRefreshControl()
@@ -234,8 +236,10 @@ extension UsersViewController: UITableViewDelegate {
             return
         }
         
+        guard let favoriteModel = favoriteModel else { return }
+        
         tableView.deselectRow(at: indexPath, animated: true)
-        let next = UserItemsViewController(user: users[indexPath.row])
+        let next = UserItemsViewController(user: users[indexPath.row], favoriteModel: favoriteModel)
         navigationController?.pushViewController(next, animated: true)
     }
 }

@@ -10,7 +10,9 @@ import UIKit
 import QiitaKit
 
 final class UserItemsViewController: UIViewController {
-
+    
+    private let favoriteModel: FavoriteModel
+    
     private let tableView: UITableView
     
     private let refreshControl = UIRefreshControl()
@@ -28,8 +30,9 @@ final class UserItemsViewController: UIViewController {
     private var items: [Item]
     private var cellHeightList: [IndexPath: CGFloat] = [:]
 
-    init(user: User) {
+    init(user: User, favoriteModel: FavoriteModel) {
         self.user = user
+        self.favoriteModel = favoriteModel
         self.items = []
         self.tableView = UITableView(frame: .zero, style: .plain)
         super.init(nibName: nil, bundle: nil)
@@ -182,7 +185,7 @@ extension UserItemsViewController: UITableViewDelegate {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let next = ItemViewController(item: items[indexPath.row])
+        let next = ItemViewController(item: items[indexPath.row], favoriteModel: favoriteModel)
         navigationController?.pushViewController(next, animated: true)
     }
 }
