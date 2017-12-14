@@ -14,10 +14,13 @@ protocol FavoriteModelDelegate: class {
 
 final class FavoriteModel {
     
-    static let shared = FavoriteModel()
-    private init() {}
+    private(set) var items: [Item] = [] {
+        didSet {
+            delegate?.favoriteDidChange()
+        }
+    }
     
-    var items: [Item] = []
+    weak var delegate: FavoriteModelDelegate?
     
     func add(item: Item) {
         guard items.index(where: { $0.url == item.url }) == nil else {

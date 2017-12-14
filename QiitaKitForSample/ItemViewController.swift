@@ -13,10 +13,11 @@ import SafariServices
 final class ItemViewController: SFSafariViewController {
 
     private let item: Item
-    private let favoriteModel: FavoriteModel = FavoriteModel.shared
+    private let favoriteModel: FavoriteModel
     
-    init(item: Item) {
+    init(item: Item, favoriteModel: FavoriteModel) {
         self.item = item
+        self.favoriteModel = favoriteModel
         super.init(url: item.url, entersReaderIfAvailable: false)
         hidesBottomBarWhenPushed = true
     }
