@@ -9,26 +9,13 @@
 import UIKit
 import QiitaKit
 
-final class UsersViewController: UIViewController {
+protocol UsersViewable: class {
+    func reloadData(count: Int, total: Int)
+}
+
+final class UsersViewController: UIViewController, UsersViewable {
     
-    var favoriteModel: FavoriteModel?
-    
-    @IBOutlet weak var tableView: UITableView!
-    
-    private let refreshControl = UIRefreshControl()
-    private var isFetching = false {
-        didSet {
-            DispatchQueue.main.async {
-                self.navigationItem.prompt = "\(self.users.count) / \(self.totalCount)"
-                self.tableView.reloadData()
-            }
-        }
-    }
-    private var page: Int = 0
-    private var totalCount: Int = 0
-    private var userId: String = "masashi-sutou"
-    private var users: [User] = []
-    private var cellHeightList: [IndexPath: CGFloat] = [:]
+    var favoriteItemsPresenter: FavoriteItemsPresenter?
     private var cellStyles: Set<UserCell.Style> = [] {
         didSet {
             DispatchQueue.main.async {
@@ -42,32 +29,30 @@ final class UsersViewController: UIViewController {
             }
         }
     }
+    private var cellHeightList: [IndexPath: CGFloat] = [:]
+
+    @IBOutlet weak var tableView: UITableView!
+    private let refreshControl = UIRefreshControl()
+    private lazy var styleButton: UIBarButtonItem = {
+        return UIBarButtonItem(title: "Style",
+                               style: .done,
+                               target: self,
+                               action: #selector(tappedChangeCellStyle(_:)))
+    }()
+    private lazy var userIdButton: UIBarButtonItem = {
+        return UIBarButtonItem(title: "UserID",
+                               style: .done,
+                               target: self,
+                               action: #selector(tappedChangeUserId(_:)))
+    }()
     
-    // MARK: - API
+    private lazy var presenter: UsersViewPresenter = UsersViewPresenter(view: self, userId: "masashi-sutou")
     
-    private func fetch(isPaging: Bool, completion: @escaping () -> Void) {
-        if isFetching { return }
-        if totalCount > 0 && totalCount == users.count {
-            completion()
-            return
-        }
-        
-        isFetching = true
-        page = isPaging ? page + 1 : page
-        let request = UserFolloweeRequest(page: page, perPage: 20, userId: userId)
-        ApiSession.shared.send(request, completion: { [weak self] in
-            switch $0 {
-            case .success(let response):
-                self?.totalCount = response.totalCount
-                if let me = self, isPaging || me.users.count < response.values.count * me.page {
-                    me.users.append(contentsOf: response.values)
-                }
-            case .failure(let error):
-                print("QiitaKit:[Error] -> ", error)
-            }
-            self?.isFetching = false
-            completion()
-        })
+    // MARK: - UsersViewable
+    
+    func reloadData(count: Int, total: Int) {
+        navigationItem.prompt = "\(count) / \(total)"
+        tableView.reloadData()
     }
     
     // MARK: - Life Cycle
@@ -83,15 +68,18 @@ final class UsersViewController: UIViewController {
         }
         
         navigationItem.title = "ユーザーの一覧"
-        navigationItem.prompt = "\(users.count) / \(totalCount)"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Style", style: .done, target: self, action: #selector(tappedChangeCellStyle(_:)))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "UserID", style: .done, target: self, action: #selector(tappedChangeUserId(_:)))
+        navigationItem.prompt = "\(0) / \(0)"
+        navigationItem.leftBarButtonItem = styleButton
+        navigationItem.rightBarButtonItem = userIdButton
         
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.tableFooterView = UIView()
         tableView.registerCell(UserCell.self)
         tableView.registerHeaderFooterView(LoadingFooterView.self)
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-
+        
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
             tableView.refreshControl = refreshControl
@@ -103,19 +91,19 @@ final class UsersViewController: UIViewController {
             tableView.addSubview(refreshControl)
         }
         
-        fetch(isPaging: true, completion: {})
+        presenter.fetch(isPaging: true) {}
     }
     
     // MARK: - Transition
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        self.cellHeightList = [:]
+        cellHeightList = [:]
     }
     
     // MARK: - UIRefreshControl
     
     @objc private func refresh(_ sender: UIRefreshControl) {
-        fetch(isPaging: false, completion: {
+        presenter.fetch(isPaging: false, completion: {
             DispatchQueue.main.async {
                 sender.endRefreshing()
             }
@@ -148,7 +136,6 @@ final class UsersViewController: UIViewController {
     }
     
     @objc private func tappedChangeUserId(_ sender: UIBarButtonItem) {
-        
         let alert = UIAlertController(title: "QiitaのユーザーIDを入力", message: "\n例: masashi-sutou", preferredStyle: .alert)
         alert.popoverPresentationController?.barButtonItem = sender
         alert.addTextField { (textField) in
@@ -156,11 +143,9 @@ final class UsersViewController: UIViewController {
             textField.delegate = self
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-            self.page = 0
-            self.totalCount = 0
-            self.users = []
+            self.presenter.clearPaging()
             self.cellHeightList = [:]
-            self.fetch(isPaging: true, completion: {})
+            self.presenter.fetch(isPaging: true, completion: {})
         }))
         alert.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -172,24 +157,24 @@ extension UsersViewController: UITableViewDataSource {
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return !isFetching && users.isEmpty ? 1 : users.count
+        return presenter.numberOfUsers
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if users.isEmpty {
-            return UITableView.notFoundTextCell(text: UserFolloweeRequest.notFoundText)
+        guard let user = presenter.user(at: indexPath.row) else {
+            return UITableView.notFoundTextCell(text: UserItemRequest.notFoundText)
         }
         
         let cell = tableView.dequeueReusableCell(UserCell.self, for: indexPath)
         cell.tag = indexPath.row
-        cell.configure(with: users[indexPath.row], cellStyles: cellStyles)
+        cell.configure(with: user, cellStyles: cellStyles)
         return cell
     }
-        
+    
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        guard let height = self.cellHeightList[indexPath] else {
+        guard let height = cellHeightList[indexPath] else {
             return UITableViewAutomaticDimension
         }
         return height
@@ -197,28 +182,26 @@ extension UsersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if !self.cellHeightList.keys.contains(indexPath) {
-            self.cellHeightList[indexPath] = cell.frame.height
+        if !cellHeightList.keys.contains(indexPath) {
+            cellHeightList[indexPath] = cell.frame.height
         }
         
-        if indexPath.row == users.count - 1 {
-            fetch(isPaging: true, completion: {})
-        }
+        presenter.nextFetch(isPaging: true, index: indexPath.row)
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
-        if refreshControl.isRefreshing || !isFetching {
+        if refreshControl.isRefreshing || !presenter.isFetching {
             return UIView()
         }
         
         let view = tableView.dequeueReusableHeaderFooterView(LoadingFooterView.self)
-        view.isLoading = isFetching
+        view.isLoading = presenter.isFetching
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return isFetching ? LoadingFooterView.defaultHeight : .leastNormalMagnitude
+        return presenter.isFetching ? LoadingFooterView.defaultHeight : .leastNormalMagnitude
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
@@ -231,15 +214,9 @@ extension UsersViewController: UITableViewDelegate {
     // MARK: UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if users.isEmpty {
-            return
-        }
-        
-        guard let favoriteModel = favoriteModel else { return }
-        
         tableView.deselectRow(at: indexPath, animated: true)
-        let next = UserItemsViewController(user: users[indexPath.row], favoriteModel: favoriteModel)
+        guard let user = presenter.user(at: indexPath.row), let favoriteItemsPresenter = favoriteItemsPresenter else { return }
+        let next = UserItemsViewController(user: user, favoriteItemsPresenter: favoriteItemsPresenter)
         navigationController?.pushViewController(next, animated: true)
     }
 }
@@ -250,6 +227,6 @@ extension UsersViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        userId = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        presenter.userId = text.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

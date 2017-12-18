@@ -40,7 +40,10 @@
 		0BB3618E1FC7419500A79EEC /* UIView+autoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB3618D1FC7419500A79EEC /* UIView+autoLayout.swift */; };
 		0BB6B21A1FE032D000405388 /* FavoriteItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B2191FE032D000405388 /* FavoriteItemsViewController.swift */; };
 		0BB6B21C1FE0386900405388 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B21B1FE0386900405388 /* ItemViewController.swift */; };
-		0BB6B21E1FE03C7B00405388 /* FavoriteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B21D1FE03C7B00405388 /* FavoriteModel.swift */; };
+		0BB6B2211FE2DC6100405388 /* FavoriteItemsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B2201FE2DC6100405388 /* FavoriteItemsViewPresenter.swift */; };
+		0BB6B2261FE2EABF00405388 /* ItemViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B2251FE2EABF00405388 /* ItemViewPresenter.swift */; };
+		0BB6B22C1FE4CC8B00405388 /* UserItemsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B22B1FE4CC8B00405388 /* UserItemsViewPresenter.swift */; };
+		0BB6B22E1FE6E86E00405388 /* UsersViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB6B22D1FE6E86E00405388 /* UsersViewPresenter.swift */; };
 		0BD530E51FC6F77D00D00200 /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD530E41FC6F77D00D00200 /* LoadingFooterView.swift */; };
 		0BD530E71FC6F78C00D00200 /* LoadingFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0BD530E61FC6F78C00D00200 /* LoadingFooterView.xib */; };
 /* End PBXBuildFile section */
@@ -105,7 +108,10 @@
 		0BB3618D1FC7419500A79EEC /* UIView+autoLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+autoLayout.swift"; sourceTree = "<group>"; };
 		0BB6B2191FE032D000405388 /* FavoriteItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteItemsViewController.swift; sourceTree = "<group>"; };
 		0BB6B21B1FE0386900405388 /* ItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
-		0BB6B21D1FE03C7B00405388 /* FavoriteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteModel.swift; sourceTree = "<group>"; };
+		0BB6B2201FE2DC6100405388 /* FavoriteItemsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteItemsViewPresenter.swift; sourceTree = "<group>"; };
+		0BB6B2251FE2EABF00405388 /* ItemViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewPresenter.swift; sourceTree = "<group>"; };
+		0BB6B22B1FE4CC8B00405388 /* UserItemsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserItemsViewPresenter.swift; sourceTree = "<group>"; };
+		0BB6B22D1FE6E86E00405388 /* UsersViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewPresenter.swift; sourceTree = "<group>"; };
 		0BD530E41FC6F77D00D00200 /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
 		0BD530E61FC6F78C00D00200 /* LoadingFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingFooterView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,11 +160,10 @@
 			isa = PBXGroup;
 			children = (
 				0B4B48481FAFF2180020CDF4 /* AppDelegate.swift */,
-				0B4B48841FB0C7620020CDF4 /* UsersViewController.swift */,
-				0B945BA21FBA112C0047F91E /* UserItemsViewController.swift */,
-				0BB6B21B1FE0386900405388 /* ItemViewController.swift */,
-				0BB6B2191FE032D000405388 /* FavoriteItemsViewController.swift */,
-				0BB6B21D1FE03C7B00405388 /* FavoriteModel.swift */,
+				0BB6B2281FE4CAAC00405388 /* User */,
+				0BB6B2271FE4CA9800405388 /* UserItem */,
+				0BB6B2241FE2EAB100405388 /* Item */,
+				0BB6B21F1FE2DB3200405388 /* FavoriteItem */,
 				0B4B484C1FAFF2180020CDF4 /* Main.storyboard */,
 				0B4B484F1FAFF2180020CDF4 /* Assets.xcassets */,
 				0B4B48511FAFF2180020CDF4 /* LaunchScreen.storyboard */,
@@ -263,6 +268,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		0BB6B21F1FE2DB3200405388 /* FavoriteItem */ = {
+			isa = PBXGroup;
+			children = (
+				0BB6B2191FE032D000405388 /* FavoriteItemsViewController.swift */,
+				0BB6B2201FE2DC6100405388 /* FavoriteItemsViewPresenter.swift */,
+			);
+			path = FavoriteItem;
+			sourceTree = "<group>";
+		};
+		0BB6B2241FE2EAB100405388 /* Item */ = {
+			isa = PBXGroup;
+			children = (
+				0BB6B21B1FE0386900405388 /* ItemViewController.swift */,
+				0BB6B2251FE2EABF00405388 /* ItemViewPresenter.swift */,
+			);
+			path = Item;
+			sourceTree = "<group>";
+		};
+		0BB6B2271FE4CA9800405388 /* UserItem */ = {
+			isa = PBXGroup;
+			children = (
+				0B945BA21FBA112C0047F91E /* UserItemsViewController.swift */,
+				0BB6B22B1FE4CC8B00405388 /* UserItemsViewPresenter.swift */,
+			);
+			path = UserItem;
+			sourceTree = "<group>";
+		};
+		0BB6B2281FE4CAAC00405388 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				0B4B48841FB0C7620020CDF4 /* UsersViewController.swift */,
+				0BB6B22D1FE6E86E00405388 /* UsersViewPresenter.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -321,7 +362,7 @@
 		0B4B483D1FAFF2180020CDF4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0910;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "須藤将史";
 				TargetAttributes = {
@@ -402,10 +443,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BB6B22C1FE4CC8B00405388 /* UserItemsViewPresenter.swift in Sources */,
 				0B4B48851FB0C7620020CDF4 /* UsersViewController.swift in Sources */,
 				0B4B48491FAFF2180020CDF4 /* AppDelegate.swift in Sources */,
+				0BB6B2211FE2DC6100405388 /* FavoriteItemsViewPresenter.swift in Sources */,
+				0BB6B22E1FE6E86E00405388 /* UsersViewPresenter.swift in Sources */,
 				0BB6B21C1FE0386900405388 /* ItemViewController.swift in Sources */,
-				0BB6B21E1FE03C7B00405388 /* FavoriteModel.swift in Sources */,
+				0BB6B2261FE2EABF00405388 /* ItemViewPresenter.swift in Sources */,
 				0B945BA31FBA112C0047F91E /* UserItemsViewController.swift in Sources */,
 				0BB6B21A1FE032D000405388 /* FavoriteItemsViewController.swift in Sources */,
 			);
@@ -499,6 +543,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -556,6 +601,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
