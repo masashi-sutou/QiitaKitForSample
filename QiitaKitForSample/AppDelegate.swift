@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         // Qiita Authorization
-        ApiSession.shared.token = "229dc2cda9c0b71f0a3a235b303411954922f67c"
+        ApiSession.shared.token = "Your Qiita Personal Access Token"
         
         if let viewControllers = (window?.rootViewController as? UITabBarController)?.viewControllers,
             let usersVC = viewControllers.flatMap({
