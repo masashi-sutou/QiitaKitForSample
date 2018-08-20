@@ -13,6 +13,7 @@ public struct Response<T: Codable> {
     public let values: [T]
 
     init(single data: Data, response: HTTPURLResponse?) throws {
+        // FIXME: レスポンスヘッダに Total-Count が含まれなくなっている？
         let strTotalCount: String = response?.allHeaderFields["Total-Count"] as? String ?? ""
         self.totalCount = Int(strTotalCount) ?? 0
         let decoder = JSONDecoder()
@@ -21,6 +22,7 @@ public struct Response<T: Codable> {
     }
     
     init(unkeyedContainer data: Data, response: HTTPURLResponse?) throws {
+        // FIXME: レスポンスヘッダに Total-Count が含まれなくなっている？
         let strTotalCount: String = response?.allHeaderFields["Total-Count"] as? String ?? ""
         self.totalCount = Int(strTotalCount) ?? 0
         let decoder = JSONDecoder()

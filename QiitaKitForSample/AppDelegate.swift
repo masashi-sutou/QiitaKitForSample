@@ -20,10 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ApiSession.shared.token = "Your Qiita Personal Access Token"
         
         if let viewControllers = (window?.rootViewController as? UITabBarController)?.viewControllers,
-            let usersVC = viewControllers.flatMap({
+            let usersVC = viewControllers.compactMap({
                 ($0 as? UINavigationController)?.topViewController as? UsersViewController
             }).first,
-            let favoriteItemsVC = viewControllers.flatMap({
+            let favoriteItemsVC = viewControllers.compactMap({
                 ($0 as? UINavigationController)?.topViewController as? FavoriteItemsViewController
             }).first {
             usersVC.favoriteModel = favoriteItemsVC.favoriteModel
