@@ -20,7 +20,7 @@ extension UILabel {
     }
     
     func setText(as icon: FontAwesomeIcon, ofSize size: CGFloat = 16.0) {
-        font = .icon(from: .FontAwesome, ofSize: size)
+        font = .icon(from: .fontAwesome, ofSize: size)
         text = .fontAwesomeIcon(icon.rawValue)
     }
 }

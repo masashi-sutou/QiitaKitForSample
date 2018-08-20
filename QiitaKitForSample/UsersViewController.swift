@@ -33,7 +33,7 @@ final class UsersViewController: UIViewController {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.visibleCells
-                    .flatMap { $0 as? UserCell }
+                    .compactMap { $0 as? UserCell }
                     .forEach {
                         self.tableView.beginUpdates()
                         $0.setupCellStyle(self.cellStyles, isAnimate: true)
@@ -47,6 +47,7 @@ final class UsersViewController: UIViewController {
     
     private func fetch(isPaging: Bool, completion: @escaping () -> Void) {
         if isFetching { return }
+        // FIXME: レスポンスヘッダに Total-Count が含まれなくなっている？
         if totalCount > 0 && totalCount == users.count {
             completion()
             return
@@ -59,7 +60,9 @@ final class UsersViewController: UIViewController {
             switch $0 {
             case .success(let response):
                 self?.totalCount = response.totalCount
-                if let me = self, isPaging || me.users.count < response.values.count * me.page {
+                if let me = self, response.values.count == 0 {
+                    self?.totalCount = me.users.count
+                } else if let me = self, isPaging || me.users.count < response.values.count * me.page {
                     me.users.append(contentsOf: response.values)
                 }
             case .failure(let error):
