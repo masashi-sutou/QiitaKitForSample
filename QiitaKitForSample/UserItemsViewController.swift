@@ -46,7 +46,6 @@ final class UserItemsViewController: UIViewController {
     
     private func fetch(isPaging: Bool, completion: @escaping () -> Void) {
         if isFetching { return }
-        // FIXME: レスポンスヘッダに Total-Count が含まれなくなっている？
         if totalCount > 0 && totalCount == items.count {
             completion()
             return
@@ -59,9 +58,7 @@ final class UserItemsViewController: UIViewController {
             switch $0 {
             case .success(let response):
                 self?.totalCount = response.totalCount
-                if let me = self, response.values.count == 0 {
-                    self?.totalCount = me.items.count
-                } else if let me = self, isPaging || me.items.count < response.values.count * me.page {
+                if let me = self, isPaging || me.items.count < response.values.count * me.page {
                     me.items.append(contentsOf: response.values)
                 }
             case .failure(let error):
