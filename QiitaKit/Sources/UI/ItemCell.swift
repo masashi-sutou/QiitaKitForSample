@@ -36,7 +36,7 @@ public final class ItemCell: UITableViewCell, Nibable {
         shared.titleLabel.preferredMaxLayoutWidth = shared.titleLabel.bounds.width
         shared.configure(with: item)
         shared.layoutIfNeeded()
-        let height: CGFloat = shared.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        let height: CGFloat = shared.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return max(minimumHeight, height) + 1.0 // 1.0 = separatorHeight
     }
     

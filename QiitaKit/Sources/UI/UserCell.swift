@@ -73,7 +73,7 @@ public final class UserCell: UITableViewCell, Nibable {
     
     public override func prepareForReuse() {
         super.prepareForReuse()
-        Manager.shared.cancelRequest(for: thumbnailImageView)
+        Nuke.cancelRequest(for: thumbnailImageView)
         thumbnailImageView.image = nil
     }
 
@@ -84,7 +84,7 @@ public final class UserCell: UITableViewCell, Nibable {
         shared.descriptionLabel.preferredMaxLayoutWidth = shared.descriptionLabel.bounds.width
         shared.configure(with: user, cellStyles: cellStyles)
         shared.layoutIfNeeded()
-        let height: CGFloat = shared.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        let height: CGFloat = shared.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         return max(minimumHeight, height) + 1.0 // 1.0 = separatorHeight
     }
     
@@ -92,7 +92,7 @@ public final class UserCell: UITableViewCell, Nibable {
     
     public func configure(with user: User, cellStyles: Set<UserCell.Style>) {
         
-        Manager.shared.loadImage(with: user.profileImageUrl, into: thumbnailImageView)
+        Nuke.loadImage(with: user.profileImageUrl, into: thumbnailImageView)
         
         rowLabel.text = String(tag)
         

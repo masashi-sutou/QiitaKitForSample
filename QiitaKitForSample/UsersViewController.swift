@@ -190,7 +190,7 @@ extension UsersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         
         guard let height = self.cellHeightList[indexPath] else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
         return height
     }

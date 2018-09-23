@@ -1,2 +1,3 @@
-github "kean/Nuke" ~> 5.0
-github "0x73/SwiftIconFont"
+github "kean/Nuke"
+# github "0x73/SwiftIconFont"
+github "masashi-sutou/SwiftIconFont" "convert_swift4.2"
